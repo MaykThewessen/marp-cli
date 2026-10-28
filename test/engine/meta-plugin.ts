@@ -1,4 +1,4 @@
-import { Marp } from '@marp-team/marp-core'
+import { Marp } from '@marp-team/marp-core/full'
 import type MarkdownIt from 'markdown-it'
 import * as cli from '../../src/cli'
 import metaPlugin from '../../src/engine/meta-plugin'

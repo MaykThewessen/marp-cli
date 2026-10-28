@@ -1,16 +1,26 @@
 const esModules = [
+  '@marp-team/marp-core',
+  '@mathjax/',
+  '@shikijs',
   '@sindresorhus/merge-streams',
   'ansi-regex',
   'array-union',
+  'beautiful-mermaid',
+  'ccount',
+  'character-entities-',
   'chalk',
   'chrome-launcher',
+  'comma-separated-tokens',
   'find-up',
+  'hast-util-',
+  'html-void-elements',
   'import-meta-resolve',
   'is-docker',
   'is-inside-container',
   'is-wsl',
   'lighthouse-logger',
   'locate-path',
+  'mhchemparser',
   'nanoid',
   'os-locale',
   'p-limit',
@@ -19,10 +29,15 @@ const esModules = [
   'path-type',
   'package-up',
   'pptxgenjs',
+  'property-information',
+  'shiki',
   'slash',
+  'space-separated-tokens',
+  'stringify-entities',
   'strip-ansi',
   'unicorn-magic',
   'yocto-queue',
+  'zwitch',
 ]
 
 module.exports = {
@@ -31,6 +46,10 @@ module.exports = {
   coverageProvider: 'v8',
   coverageThreshold: { global: { lines: 95 } },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  moduleNameMapper: {
+    '^beautiful-mermaid$':
+      '<rootDir>/node_modules/beautiful-mermaid/dist/index.js',
+  },
   prettierPath: null,
   setupFiles: ['./jest.setup.js'],
   transform: {

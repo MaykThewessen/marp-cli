@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import '../_browser/matchMedia'
-import { Marp } from '@marp-team/marp-core'
+import { Marp } from '@marp-team/marp-core/full'
 import { Element as MarpitElement } from '@marp-team/marpit'
 import bespoke from '../../src/templates/bespoke/bespoke'
 import {

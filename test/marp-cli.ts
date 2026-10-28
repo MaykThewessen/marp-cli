@@ -103,7 +103,7 @@ describe('Marp CLI', () => {
           jest.spyOn(version._helpers, 'isMarpCore').mockResolvedValue(true)
 
           mockEnginePath(
-            assetFn('../node_modules/@marp-team/marp-core/lib/marp.js')
+            assetFn('../node_modules/@marp-team/marp-core/lib/full.cjs')
           )
 
           jest.doMock(pkgPath, () => pkgJson)

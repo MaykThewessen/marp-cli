@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { URL } from 'node:url'
 import { promisify } from 'node:util'
-import { Marp } from '@marp-team/marp-core'
+import { Marp } from '@marp-team/marp-core/full'
 import { Options } from '@marp-team/marpit'
 import type { Cheerio } from 'cheerio'
 import { load } from 'cheerio'
@@ -12,6 +12,7 @@ import { TimeoutError } from 'puppeteer-core'
 import { fromBuffer as yauzlFromBuffer } from 'yauzl'
 import { BrowserManager } from '../src/browser/manager'
 import { Converter, ConvertType, ConverterOption } from '../src/converter'
+import { ResolvedEngine } from '../src/engine'
 import { CLIError, CLIErrorCode } from '../src/error'
 import { File, FileType } from '../src/file'
 import * as sofficeFinder from '../src/soffice/finder'
@@ -231,6 +232,8 @@ describe('Converter', () => {
       })
 
       it('exposes marp getter to allow using built-in Marp Core instance with current options', async () => {
+        const { klass: DefaultMarp } =
+          await ResolvedEngine.resolveDefaultEngine()
         const plugin = jest.fn()
         const engine = createFunctionalEngine(({ marp }) => marp.use(plugin))
 
@@ -241,7 +244,7 @@ describe('Converter', () => {
 
         expect(engine.spy.mock.calls[0][0]).toHaveProperty(
           'marp',
-          expect.any(Marp)
+          expect.any(DefaultMarp)
         )
 
         expect(engine.spy.mock.calls[0][0].marp.options).toMatchObject({
@@ -249,7 +252,7 @@ describe('Converter', () => {
         })
 
         expect(plugin).toHaveBeenCalledWith(
-          expect.objectContaining({ marpit: expect.any(Marp) })
+          expect.objectContaining({ marpit: expect.any(DefaultMarp) })
         )
       })
     })

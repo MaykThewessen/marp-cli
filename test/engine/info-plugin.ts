@@ -1,4 +1,4 @@
-import { Marp } from '@marp-team/marp-core'
+import { Marp } from '@marp-team/marp-core/full'
 import { Marpit } from '@marp-team/marpit'
 import MarkdownIt from 'markdown-it'
 import infoPlugin, { engineInfo } from '../../src/engine/info-plugin'

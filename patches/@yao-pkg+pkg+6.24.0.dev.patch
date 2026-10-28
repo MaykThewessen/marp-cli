@@ -1,7 +1,8 @@
 diff --git a/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts b/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts
+index c274c88..c775d2f 100644
 --- a/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts
 +++ b/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts
-@@ -31,5 +31,7 @@ export interface ParsedInput {
+@@ -31,6 +31,8 @@ export interface ParsedInput {
      targets?: string;
      /** `--build`: force rebuilding base Node.js binaries from source. */
      build?: boolean;
@@ -9,7 +10,8 @@ diff --git a/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts b/node_modules/@yao-p
 +    useLocalNode?: boolean;
      /** Pre-merge flag values keyed by CLI name (see `RawFlags`). */
      flags: RawFlags;
-@@ -132,5 +134,7 @@ export interface ResolvedConfig {
+     /**
+@@ -132,6 +134,8 @@ export interface ResolvedConfig {
      flags: ResolvedFlags;
      /** Force rebuilding base Node.js binaries from source. */
      forceBuild: boolean;
@@ -17,44 +19,61 @@ diff --git a/node_modules/@yao-pkg/pkg/lib-es5/config.d.ts b/node_modules/@yao-p
 +    useLocalNode: boolean;
      /** Resolved single-output base path (absolute). */
      output: string;
+     /** `true` when the output name was derived automatically. */
 diff --git a/node_modules/@yao-pkg/pkg/lib-es5/config.js b/node_modules/@yao-pkg/pkg/lib-es5/config.js
+index 315e479..435bc98 100644
 --- a/node_modules/@yao-pkg/pkg/lib-es5/config.js
 +++ b/node_modules/@yao-pkg/pkg/lib-es5/config.js
-@@ -337,5 +337,6 @@ function parseOptionsInput(options) {
+@@ -337,6 +337,7 @@ function parseOptionsInput(options) {
          outputPath: options.outputPath,
          targets: joinList(options.targets),
          build: options.build,
 +        useLocalNode: options.useLocalNode === true,
          flags,
          apiPkg: Object.keys(apiPkg).length ? apiPkg : undefined,
-@@ -811,5 +812,6 @@ async function resolveConfig(parsed) {
+     };
+@@ -811,6 +812,7 @@ async function resolveConfig(parsed) {
          pkg,
          flags,
          forceBuild: parsed.build === true,
 +        useLocalNode: parsed.useLocalNode === true,
          output,
          autoOutput,
+         targets,
 diff --git a/node_modules/@yao-pkg/pkg/lib-es5/index.js b/node_modules/@yao-pkg/pkg/lib-es5/index.js
+index f4a2998..f5495ee 100644
 --- a/node_modules/@yao-pkg/pkg/lib-es5/index.js
 +++ b/node_modules/@yao-pkg/pkg/lib-es5/index.js
-@@ -119 +119 @@ async function exec(argvOrOptions) {
+@@ -116,7 +116,7 @@ async function exec(argvOrOptions) {
+     log_1.log.info(`pkg@${version}`);
+     // Single "understand what the user asked for" step. Downstream never
+     // touches raw argv / configJson for behavior decisions.
 -    const { input, inputFin, inputJson, config, configJson, pkg, flags, forceBuild, targets: resolvedTargets, } = await (0, config_1.resolveConfig)(parsed);
 +    const { input, inputFin, inputJson, config, configJson, pkg, flags, forceBuild, useLocalNode, targets: resolvedTargets, } = await (0, config_1.resolveConfig)(parsed);
-@@ -164,3 +164,4 @@ async function exec(argvOrOptions) {
+     // Assign unconditionally: the programmatic API may call `exec()` multiple
+     // times in the same process, and `log.debugMode` is module-global. Leaving
+     // it set from a prior run would leak debug output into a later `debug:false`
+@@ -163,6 +163,7 @@ async function exec(argvOrOptions) {
+                 params: { ...params, seaMode: true },
                  addition: (0, config_1.isConfiguration)(input) ? input : undefined,
                  doCompress: flags.compress,
 +                useLocalNode,
              });
-@@ -177,4 +178,5 @@ async function exec(argvOrOptions) {
+         }
+         else {
+@@ -176,6 +177,7 @@ async function exec(argvOrOptions) {
              await (0, sea_1.default)(inputFin, {
                  targets,
                  signature: flags.signature,
 +                useLocalNode,
              });
+         }
+         return;
 diff --git a/node_modules/@yao-pkg/pkg/lib-es5/types.d.ts b/node_modules/@yao-pkg/pkg/lib-es5/types.d.ts
+index 513df45..9b6a791 100644
 --- a/node_modules/@yao-pkg/pkg/lib-es5/types.d.ts
 +++ b/node_modules/@yao-pkg/pkg/lib-es5/types.d.ts
-@@ -213,5 +213,7 @@ export interface PkgExecOptions extends PkgBaseOptions {
+@@ -213,6 +213,8 @@ export interface PkgExecOptions extends PkgBaseOptions {
      bakeOptions?: string | string[];
      /** Build base binaries from source instead of downloading prebuilt ones. */
      build?: boolean;
@@ -62,3 +81,4 @@ diff --git a/node_modules/@yao-pkg/pkg/lib-es5/types.d.ts b/node_modules/@yao-pk
 +    useLocalNode?: boolean;
      /** Package names to treat as public. `['*']` for all packages. */
      publicPackages?: string[];
+     /** Package names to ignore dictionaries for. `['*']` to disable all. */

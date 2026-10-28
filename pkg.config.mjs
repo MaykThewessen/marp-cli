@@ -1,4 +1,4 @@
-import { run } from './scripts/standalone/utils/run.mjs'
+import { smokeTest } from './scripts/standalone/smoke-test.mjs'
 import { updateWindowsMetadata } from './scripts/standalone/win-meta.mjs'
 
 const optimized = !!process.env.MARP_CLI_PKG_OPTIMIZED
@@ -8,7 +8,13 @@ const compress = process.env.MARP_CLI_PKG_COMPRESS || 'Brotli'
 export default {
   compress,
   outputPath: 'bin',
-  scripts: 'lib/**/*.js',
+  scripts: [
+    'lib/**/*.js',
+    // MathJax resolves this through a package #imports alias that pkg's walker
+    // cannot discover from the JavaScript import alone.
+    'node_modules/mhchemparser/esm/**/*.js',
+  ],
+  assets: ['node_modules/mhchemparser/esm/package.json'],
   sea: true,
   targets: ['host'],
   debug,
@@ -16,8 +22,7 @@ export default {
     // Windows: Update resource metadata (icon, version info, etc.)
     if (process.platform === 'win32') await updateWindowsMetadata(bin)
 
-    // Smoke test to check the binary is working
-    await run(bin, ['-v'], { stdio: 'inherit' })
+    await smokeTest(bin)
   },
   ...(optimized && {
     ignore: [
@@ -27,7 +32,6 @@ export default {
       '**/{test,tests,__tests__}/**',
       '**/*.{test,spec}.*',
       '**/*.md',
-      '**/mathjax-full/es5/**',
       `**/prebuilds/!(${process.platform}-${process.arch})/**/*.bare`,
     ],
   }),

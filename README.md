@@ -21,7 +21,7 @@ It can convert Marp / Marpit Markdown files into static HTML / CSS, PDF, PowerPo
 
 [npx (`npm exec`)](https://docs.npmjs.com/cli/commands/npx) is the best way to use the latest Marp CLI if you wanted
 one-shot Markdown conversion _without install_. Just run below if you have
-installed [Node.js](https://nodejs.org/) v18 and later.
+installed [Node.js](https://nodejs.org/) v20.19 and later.
 
 ```bash
 # Convert slide deck into HTML
@@ -98,7 +98,14 @@ scoop install marp
 
 ### Use Node.js
 
-[Node.js](https://nodejs.org/) v18 and later is required to use Marp CLI.
+[Node.js](https://nodejs.org/) v20.19 and later is required to use Marp CLI.
+
+Marp CLI bundles the full build of Marp Core v5, including MathJax v4,
+KaTeX, Shiki syntax highlighting, and Mermaid diagrams. Custom themes that
+target highlight.js `.hljs-*` classes must use the corresponding
+`--marp-shiki-*` CSS variables instead. See the
+[Marp Core v5 migration guide](https://github.com/marp-team/marp-core/blob/main/docs/migration-v5.md)
+for theme and custom engine changes.
 
 #### Local installation
 
@@ -584,7 +591,7 @@ By using `--version` (`-v`) option, you may confirm the version of engine that i
 
 ```console
 $ marp --version
-@marp-team/marp-cli v4.x.x (w/ @marp-team/marp-core v4.x.x)
+@marp-team/marp-cli v4.x.x (w/ @marp-team/marp-core v5.x.x)
 ```
 
 ### Use specific version of Marp Core
@@ -594,9 +601,9 @@ Marp CLI prefers to use _an installed core to local project by user_ than the bu
 If the current project has installed `@marp-team/marp-core` individually, it would show its version and the annotation: `w/ user-installed @marp-team/marp-core vX.X.X` or `w/ customized engine`.
 
 ```console
-$ npm i @marp-team/marp-cli @marp-team/marp-core@^4.0.0 --save-dev
+$ npm i @marp-team/marp-cli @marp-team/marp-core@^5.0.2 --save-dev
 $ npx marp --version
-@marp-team/marp-cli v4.x.x (w/ user-installed @marp-team/marp-core v4.0.0)
+@marp-team/marp-cli v4.x.x (w/ user-installed @marp-team/marp-core v5.0.2)
 ```
 
 ## Configuration file

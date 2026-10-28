@@ -1,5 +1,5 @@
 /** @jest-environment jsdom */
-import { Marp } from '@marp-team/marp-core'
+import { Marp } from '@marp-team/marp-core/full'
 import {
   pdfOutlinePlugin,
   pptrOutlinePositionResolver,

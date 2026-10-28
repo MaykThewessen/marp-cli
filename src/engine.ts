@@ -47,7 +47,7 @@ export class ResolvedEngine<T extends Engine = Engine> {
 
         // Bundled Marp Core
         Object.assign(
-          () => import('@marp-team/marp-core').then(({ Marp }) => Marp),
+          () => import('@marp-team/marp-core/full').then(({ Marp }) => Marp),
           { [preResolveAsyncSymbol]: true }
         ),
       ])
